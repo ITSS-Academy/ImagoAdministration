@@ -10,7 +10,6 @@ import {
 import {SharedModule} from '../../../../shared/shared.module';
 import {
   IconService,
-  ListItem,
   PaginationModel,
   TableHeaderItem,
   TableItem,

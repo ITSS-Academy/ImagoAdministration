@@ -1,13 +1,13 @@
-@if (loading$|async) {
+@if (loadingAdminRole$|async) {
   <cds-loading
     [isActive]="isActive"
     [size]="'normal'"
     [overlay]="overlay"
   ></cds-loading>
 } @else {
-  @if (error$|async) {
+  @if (errorAdminRole$|async) {
     <h2>Error</h2>
-    <p>{{ (error$|async) }}</p>
+    <p>{{ (errorAdminRole$|async) }}</p>
   } @else {
     <div class="editrole">
       <cds-table

@@ -1,7 +1,7 @@
 <h1>User Management</h1>
 <div class="all">
   <cds-tab-header-group
-    type="line"
+    [type]="'line'"
     [followFocus]="followFocus"
     [cacheActive]="cacheActive"
     [isNavigation]="isNavigation"
@@ -9,6 +9,7 @@
     @for (name of types; track name.name; let i = $index) {
       <button
         cdsTabHeader
+        [paneReference]="content1"
         (click)="navigateTo(name.route, i)"
         [class.cds--tabs__nav-item--selected]="i === tabIndex"
       >
@@ -18,6 +19,8 @@
   </cds-tab-header-group>
 
   <div class="content">
-    <router-outlet></router-outlet>
+    <cds-tab #content1>
+      <router-outlet></router-outlet>
+    </cds-tab>
   </div>
 </div>

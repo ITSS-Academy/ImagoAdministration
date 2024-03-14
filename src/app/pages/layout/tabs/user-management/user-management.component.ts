@@ -1,7 +1,5 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {SharedModule} from '../../../../shared/shared.module';
-import {IconService, PaginationModel, TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
-import Filter20 from '@carbon/icons/es/filter/20';
 import {Router} from "@angular/router";
 
 @Component({
@@ -14,7 +12,7 @@ import {Router} from "@angular/router";
 export class UserManagementComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(private router: Router) {
   }
-  
+
   ngOnInit(): void {
     this.name = this.router.url.split('/').pop();
     this.index = this.types.findIndex((item) => item.route === this.name);
@@ -50,7 +48,6 @@ export class UserManagementComponent implements OnInit, OnChanges, AfterViewInit
 
   navigateTo(route: string, tabIndex: number) {
     this.tabIndex = tabIndex;
-    this.router.navigate(['dashboard/user/', route]);
+    this.router.navigate(['dashboard/user/', route]).then();
   }
 }
-

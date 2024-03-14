@@ -37,7 +37,7 @@
         <cds-table
           [enableSingleSelect]="enableSingleSelect"
           [isDataGrid]="isDataGrid"
-          [model]="model"
+          [model]="modelAuthNoProfile"
           [showSelectionColumn]="showSelectionColumn"
           [size]="'md'"
           [skeleton]="skeleton"
@@ -49,7 +49,7 @@
         </cds-table>
 
         <cds-pagination-nav
-          [model]="modelPagination"
+          [model]="modelAuNoProfilePagination"
           [disabled]="disabled"
           (selectPage)="selectPage($event)"
         >

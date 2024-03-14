@@ -63,134 +63,133 @@
             </cds-pagination-nav>
           </div>
         </cds-table-container>
+      }
+    }
+    @if (isActiveOpenCUD == true) {
+      @if (currentOpenRole == 1) {
+        <div class="editrole">
+          <cds-table-container>
+            <cds-button-set>
+              <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
+                List User Role
+                <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
+              </button>
+            </cds-button-set>
+            <app-role-category></app-role-category>
+          </cds-table-container>
+        </div>
+      } @else if (currentOpenRole == 2) {
+        <div class="editrole">
+          <cds-button-set>
+            <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
+              Add Role
+              <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
+            </button>
+          </cds-button-set>
 
-        @if (isActiveOpenCUD == true) {
-          @if (currentOpenRole == 1) {
-            <div class="editrole">
-              <cds-table-container>
-                <cds-button-set>
-                  <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
-                    List User Role
-                    <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
-                  </button>
-                </cds-button-set>
-                <app-role-category></app-role-category>
-              </cds-table-container>
+
+          <form
+            [formGroup]="addForm"
+          >
+            <h3>Id Role</h3>
+            <div>
+              <input
+                cdsText
+                [invalid]="invalid"
+                [warn]="warn"
+                [disabled]="disabled"
+                [placeholder]="placeholder"
+                formControlName="id"
+              />
             </div>
-          } @else if (currentOpenRole == 2) {
-            <div class="editrole">
-              <cds-button-set>
-                <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
-                  Add Role
-                  <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
-                </button>
-              </cds-button-set>
+            <h3>Name Role</h3>
+            <div>
+              <input
+                cdsText
+                [invalid]="invalid"
+                [warn]="warn"
+                [disabled]="disabled"
+                [placeholder]="placeholder"
+                formControlName="name"
+              />
+            </div>
 
-
-              <form
-                [formGroup]="addForm"
+            <div class="drbrole">
+              <h3>Describle Role</h3>
+              <h4>0/100</h4>
+            </div>
+            <textarea
+              class="textarea"
+              cdsTextArea
+              [placeholder]="placeholder"
+              [invalid]="invalid"
+              [disabled]="disabled"
+              formControlName="description"
+              aria-label="textarea"
+            ></textarea>
+            <cds-button-set>
+              <button cdsButton="secondary"
+                      [size]="'md'"
+                      [isExpressive]="true"
+                      (click)="onSubmitAdd()"
+                      [disabled]="!addForm.valid"
               >
-                <h3>Id Role</h3>
-                <div>
-                  <input
-                    cdsText
-                    [invalid]="invalid"
-                    [warn]="warn"
-                    [disabled]="disabled"
-                    [placeholder]="placeholder"
-                    formControlName="id"
-                  />
-                </div>
-                <h3>Name Role</h3>
-                <div>
-                  <input
-                    cdsText
-                    [invalid]="invalid"
-                    [warn]="warn"
-                    [disabled]="disabled"
-                    [placeholder]="placeholder"
-                    formControlName="name"
-                  />
-                </div>
+                Add and Save
+                <svg class="cds--btn__icon" cdsIcon="add" size="20"></svg>
+              </button>
+            </cds-button-set>
+          </form>
+        </div>
+      } @else {
+        <div class="editrole">
+          <cds-button-set>
+            <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
+              Edit Role
+              <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
+            </button>
+          </cds-button-set>
 
-                <div class="drbrole">
-                  <h3>Describle Role</h3>
-                  <h4>0/100</h4>
-                </div>
-                <textarea
-                  class="textarea"
-                  cdsTextArea
-                  [placeholder]="placeholder"
-                  [invalid]="invalid"
-                  [disabled]="disabled"
-                  formControlName="description"
-                  aria-label="textarea"
-                ></textarea>
-                <cds-button-set>
-                  <button cdsButton="secondary"
-                          [size]="'md'"
-                          [isExpressive]="true"
-                          (click)="onSubmitAdd()"
-                          [disabled]="!addForm.valid"
-                  >
-                    Add and Save
-                    <svg class="cds--btn__icon" cdsIcon="add" size="20"></svg>
-                  </button>
-                </cds-button-set>
-              </form>
+          <h3>Name Role</h3>
+          <form
+            [formGroup]="editForm"
+          >
+            <div>
+              <input
+                cdsText
+                [invalid]="invalid"
+                [warn]="warn"
+                [disabled]="disabled"
+                [placeholder]="'Name'"
+                formControlName="name"
+              />
             </div>
-          } @else {
-            <div class="editrole">
-              <cds-button-set>
-                <button cdsButton="secondary" [size]="'md'" [isExpressive]="true" (click)="closeCUD()">
-                  Edit Role
-                  <svg class="cds--btn__icon" cdsIcon="close" size="20"></svg>
-                </button>
-              </cds-button-set>
 
-              <h3>Name Role</h3>
-              <form
-                [formGroup]="editForm"
+            <div class="drbrole">
+              <h3>Describle Role</h3>
+              <h4>0/100</h4>
+            </div>
+            <textarea
+              class="textarea"
+              cdsTextArea
+              [placeholder]="'Description'"
+              [invalid]="invalid"
+              [disabled]="disabled"
+              formControlName="description"
+              aria-label="textarea"
+            ></textarea>
+            <cds-button-set>
+              <button cdsButton="secondary"
+                      [size]="'md'"
+                      [isExpressive]="true"
+                      (click)="editFormRole()"
+                      [disabled]="!editForm.valid"
               >
-                <div>
-                  <input
-                    cdsText
-                    [invalid]="invalid"
-                    [warn]="warn"
-                    [disabled]="disabled"
-                    [placeholder]="'Name'"
-                    formControlName="name"
-                  />
-                </div>
-
-                <div class="drbrole">
-                  <h3>Describle Role</h3>
-                  <h4>0/100</h4>
-                </div>
-                <textarea
-                  class="textarea"
-                  cdsTextArea
-                  [placeholder]="'Description'"
-                  [invalid]="invalid"
-                  [disabled]="disabled"
-                  formControlName="description"
-                  aria-label="textarea"
-                ></textarea>
-                <cds-button-set>
-                  <button cdsButton="secondary"
-                          [size]="'md'"
-                          [isExpressive]="true"
-                          (click)="editFormRole()"
-                          [disabled]="!editForm.valid"
-                  >
-                    Edit and Save
-                    <svg class="cds--btn__icon" cdsIcon="add" size="20"></svg>
-                  </button>
-                </cds-button-set>
-              </form>
-            </div>
-          }
-        }
+                Edit and Save
+                <svg class="cds--btn__icon" cdsIcon="add" size="20"></svg>
+              </button>
+            </cds-button-set>
+          </form>
+        </div>
       }
     }
   </div>

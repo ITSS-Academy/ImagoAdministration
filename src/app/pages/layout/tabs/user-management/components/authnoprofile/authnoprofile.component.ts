@@ -7,8 +7,9 @@ import {IconService, PaginationModel, TableHeaderItem, TableItem, TableModel} fr
 import {Store} from "@ngrx/store";
 import {ProfileState} from "../../../../../../ngrx/profile/profile.state";
 import {AuthState} from "../../../../../../ngrx/auth/auth.state";
-import Filter20 from '@carbon/icons/es/filter/20';
 import {Subscription} from "rxjs";
+import Filter20 from '@carbon/icons/es/filter/20';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-authnoprofile',
@@ -18,8 +19,9 @@ import {Subscription} from "rxjs";
   styleUrl: './authnoprofile.component.scss'
 })
 export class AuthnoprofileComponent implements OnInit, OnDestroy {
-  constructor(protected iconService: IconService
-    , private store: Store<{ profile: ProfileState; auth: AuthState }>,
+  constructor(
+    protected iconService: IconService,
+    private store: Store<{ profile: ProfileState; auth: AuthState }>,
   ) {
     this.iconService.registerAll([Filter20]);
   }
@@ -46,7 +48,7 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
             item.createdAt._seconds * 1000 +
             item.createdAt._nanoseconds / 1000000
           );
-          const formattedDate = date.toLocaleString('vi-VN', {
+          const formattedDate = date.toLocaleString('en', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -64,11 +66,11 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
           ]
         }
       );
-      this.model.data = this.dataset;
-      this.modelPagination.totalDataLength = data.endPage;
+      this.modelAuthNoProfile.data = this.dataset;
+      this.modelAuNoProfilePagination.totalDataLength = data.endPage;
     });
 
-    this.model.header = [
+    this.modelAuthNoProfile.header = [
       new TableHeaderItem({data: 'Id'}),
       new TableHeaderItem({data: "Email"}),
       new TableHeaderItem({data: "Role"}),
@@ -94,8 +96,8 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
   page = 1;
   numberSize = 10;
 
-  @Input() model = new TableModel();
-  @Input() modelPagination = new PaginationModel();
+  @Input() modelAuthNoProfile = new TableModel();
+  @Input() modelAuNoProfilePagination = new PaginationModel();
   @Input() disabledPagination = false;
   @Input() pageInputDisabled = false;
   disabled = false;
@@ -119,24 +121,18 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
   selectedId: string = '';
 
   onRowSelected(index: number) {
-    if (index == -1) {
-      this.selectedId = '';
-      this.role = '';
-      this.block = false;
-    } else {
-      this.selectedId = this.model.data[index][0].data;
-      this.role = this.model.data[index][2].data;
-      this.block = this.model.data[index][4].data == "Block" ? false : true;
-    }
+    this.selectedId = this.modelAuthNoProfile.data[index][0].data;
+    this.role = this.modelAuthNoProfile.data[index][2].data;
+    this.block = this.modelAuthNoProfile.data[index][4].data != "Block";
   }
 
   filterNodeNames(searchString: string) {
-    this.model.data = this.dataset
+    this.modelAuthNoProfile.data = this.dataset
       .filter((row: TableItem[]) => row[1].data.toLowerCase().includes(searchString.toLowerCase()));
   }
 
   selectPage(page: number) {
-    this.modelPagination.currentPage = page;
+    this.modelAuNoProfilePagination.currentPage = page;
     this.store.dispatch(
       ProfileActions.getAllAuthNoProfile({
         token: this.token,
@@ -146,19 +142,17 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
     );
   }
 
-  overflowOnClick = (event: any) => {
-    event.stopPropagation();
-  }
-
   changeRole(name: string) {
     if (name == "admin") {
       this.role = "admin";
       this.changeNameRole();
-      this.model.data = this.dataset;
+      // this.dataset = this.dataset.filter((item) => item[0].data != this.selectedId);
+      this.modelAuthNoProfile.data = this.dataset;
     } else {
       this.role = "user";
       this.changeNameRole();
-      this.model.data = this.dataset;
+      // this.dataset = this.dataset.filter((item) => item[0].data != this.selectedId);
+      this.modelAuthNoProfile.data = this.dataset;
     }
   }
 
@@ -176,12 +170,14 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
   changeStatusBlock(name: string) {
     if (name == "block") {
       this.block = true;
+      this.dataset = this.dataset.find((item: TableItem[]) => item[0].data != this.selectedId);
       this.changeBlock();
-      this.model.data = this.dataset;
+      this.modelAuthNoProfile.data = this.dataset;
     } else {
       this.block = false;
+      this.dataset = this.dataset.find((item: TableItem[]) => item[0].data != this.selectedId);
       this.changeUnBlock();
-      this.model.data = this.dataset;
+      this.modelAuthNoProfile.data = this.dataset;
     }
   }
 

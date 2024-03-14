@@ -1,7 +1,6 @@
 import {Component, HostBinding, Input, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {SharedModule} from "../../../../../../shared/shared.module";
 import {IconService, PaginationModel, TableHeaderItem, TableItem, TableModel} from "carbon-components-angular";
-import Filter20 from '@carbon/icons/es/filter/20';
 import * as AuthActions from "../../../../../../ngrx/auth/auth.actions";
 import * as ProfileActions from "../../../../../../ngrx/profile/profile.actions";
 import {Subscription} from "rxjs";
@@ -9,6 +8,7 @@ import {Store} from "@ngrx/store";
 import {AuthState} from "../../../../../../ngrx/auth/auth.state";
 import {ProfileState} from "../../../../../../ngrx/profile/profile.state";
 import {AsyncPipe} from "@angular/common";
+import Filter20 from '@carbon/icons/es/filter/20';
 
 @Component({
   selector: 'app-profile',
@@ -57,11 +57,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           ]
         }
       );
-      this.model.data = this.dataset;
-      this.modelPagination.totalDataLength = data.endPage;
+      this.modelProfile.data = this.dataset;
+      this.modelProfilePagination.totalDataLength = data.endPage;
     });
 
-    this.model.header = [
+    this.modelProfile.header = [
       new TableHeaderItem({data: 'Id'}),
       new TableHeaderItem({data: "Avatar"}),
       new TableHeaderItem({data: "UserName"}),
@@ -92,8 +92,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   page = 1;
   numberSize = 10;
 
-  @Input() model = new TableModel();
-  @Input() modelPagination = new PaginationModel();
+  @Input() modelProfile = new TableModel();
+  @Input() modelProfilePagination = new PaginationModel();
   @Input() disabledPagination = false;
   @Input() pageInputDisabled = false;
   disabled = false;
@@ -126,10 +126,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.role = '';
       this.block = false;
     } else {
-      this.selectedId = this.model.data[index][0].data;
-      this.photoUrl = this.model.data[index][1].data;
-      this.role = this.model.data[index][6].data;
-      this.block = this.model.data[index][9].data == "Block" ? false : true;
+      this.selectedId = this.modelProfile.data[index][0].data;
+      this.photoUrl = this.modelProfile.data[index][1].data;
+      this.role = this.modelProfile.data[index][6].data;
+      this.block = this.modelProfile.data[index][9].data != "Block";
     }
   }
 
@@ -138,12 +138,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   filterNodeNames(searchString: string) {
-    this.model.data = this.dataset
+    this.modelProfile.data = this.dataset
       .filter((row: TableItem[]) => row[1].data.toLowerCase().includes(searchString.toLowerCase()));
   }
 
   selectPage(page: number) {
-    this.modelPagination.currentPage = page;
+    this.modelProfilePagination.currentPage = page;
     this.store.dispatch(
       ProfileActions.getAllAuthProfile({
         token: this.token,
@@ -153,17 +153,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  overflowOnClick = (event: any) => {
-    event.stopPropagation();
-  }
-
   changeRole(name: string) {
     if (name == "admin") {
       this.role = "admin";
       this.changeNameRole();
+      this.modelProfile.data = this.dataset;
     } else {
       this.role = "user";
       this.changeNameRole();
+      this.modelProfile.data = this.dataset;
     }
   }
 
@@ -185,9 +183,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (name == "block") {
       this.block = true;
       this.changeBlock();
+      this.modelProfile.data = this.dataset;
     } else {
       this.block = false;
       this.changeUnBlock();
+      this.modelProfile.data = this.dataset;
     }
   }
 

@@ -45,6 +45,7 @@ export class RoleCategoryComponent implements OnInit {
     this.subscription.push(
       this.store.select('auth', 'idToken').subscribe((token) => {
         if (token != '') {
+          this.token = token;
           this.store.dispatch(
             RoleActions.getListAdminRole({
               token: token,
@@ -76,12 +77,12 @@ export class RoleCategoryComponent implements OnInit {
 
   subscription: Subscription[] = [];
   page = 1;
+  token = '';
   numberSize = 10;
   dataSetUserListRole = [];
-  dataChoose: TableItem[][] = [];
   adminRoles$ = this.store.select((state) => state.role.adminRoleList);
-  loading$ = this.store.select((state) => state.role.isLoading);
-  error$ = this.store.select((state) => state.role.errorMessage);
+  loadingAdminRole$ = this.store.select((state) => state.role.isLoading);
+  errorAdminRole$ = this.store.select((state) => state.role.errorMessage);
 
   @Input() modelUserListRole = new TableModel();
   @Input() striped = false;
@@ -99,16 +100,12 @@ export class RoleCategoryComponent implements OnInit {
 
   selectPage(page: number) {
     this.modelPagination.currentPage = page;
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          RoleActions.getListAdminRole({
-            token: token,
-            page: page,
-            size: this.numberSize,
-          }),
-        );
-      }
-    })
+    this.store.dispatch(
+      RoleActions.getListAdminRole({
+        token: this.token,
+        page: page,
+        size: this.numberSize,
+      }),
+    );
   }
 }
