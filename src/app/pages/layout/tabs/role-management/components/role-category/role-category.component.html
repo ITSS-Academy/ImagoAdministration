@@ -1,20 +1,32 @@
-<div class="editrole">
-  <cds-table
-    [model]="modelUserListRole"
-    [size]="'md'"
-    [sortable]="sortable"
-    [showSelectionColumn]="false"
-    [enableSingleSelect]="false"
-    [stickyHeader]="stickyHeader"
-    [skeleton]="skeleton"
-    [isDataGrid]="isDataGrid"
-    [striped]="striped">
-  </cds-table>
-  <cds-pagination-nav
-    [model]="modelPagination"
-    [disabled]="disabled"
-    (selectPage)="selectPage($event)"
-    [numOfItemsToShow]="dataLengthPerPage"
-  >
-  </cds-pagination-nav>
-</div>
+@if (loading$|async) {
+  <cds-loading
+    [isActive]="isActive"
+    [size]="'normal'"
+    [overlay]="overlay"
+  ></cds-loading>
+} @else {
+  @if (error$|async) {
+    <h2>Error</h2>
+    <p>{{ (error$|async) }}</p>
+  } @else {
+    <div class="editrole">
+      <cds-table
+        [model]="modelUserListRole"
+        [size]="'md'"
+        [sortable]="sortable"
+        [showSelectionColumn]="false"
+        [enableSingleSelect]="false"
+        [stickyHeader]="stickyHeader"
+        [skeleton]="skeleton"
+        [isDataGrid]="isDataGrid"
+        [striped]="striped">
+      </cds-table>
+      <cds-pagination-nav
+        [model]="modelPagination"
+        [disabled]="disabled"
+        (selectPage)="selectPage($event)"
+      >
+      </cds-pagination-nav>
+    </div>
+  }
+}

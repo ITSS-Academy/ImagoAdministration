@@ -92,18 +92,18 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideAuth(() => getAuth())),
     importProvidersFrom(provideFirestore(() => getFirestore())),
     importProvidersFrom(provideStorage(() => getStorage())),
-    // importProvidersFrom(provideFirebaseApp(() =>
-    //   initializeApp({
-    //     "projectId": "testtokenimago",
-    //     "appId": "1:217255310789:web:c5157587514e685940c7ac",
-    //     "storageBucket": "testtokenimago.appspot.com",
-    //     "apiKey": "AIzaSyBKMm4Lby5gf0PtmmU4Bh7WBRY0X1ykOPE",
-    //     "authDomain": "testtokenimago.firebaseapp.com", "messagingSenderId": "217255310789"
-    //   }))),
-    // importProvidersFrom(provideAuth(() => getAuth())),
-    // importProvidersFrom(provideFirestore(() => getFirestore())),
-    // importProvidersFrom(provideDatabase(() => getDatabase())),
-    // importProvidersFrom(provideMessaging(() => getMessaging())),
-    // importProvidersFrom(provideStorage(() => getStorage())),
+    importProvidersFrom(provideFirebaseApp(() =>
+      initializeApp({
+        "projectId": "testtokenimago",
+        "appId": "1:217255310789:web:c5157587514e685940c7ac",
+        "storageBucket": "testtokenimago.appspot.com",
+        "apiKey": "AIzaSyBKMm4Lby5gf0PtmmU4Bh7WBRY0X1ykOPE",
+        "authDomain": "testtokenimago.firebaseapp.com", "messagingSenderId": "217255310789"
+      }))),
+    importProvidersFrom(provideAuth(() => getAuth())),
+    importProvidersFrom(provideFirestore(() => getFirestore())),
+    importProvidersFrom(provideDatabase(() => getDatabase())),
+    importProvidersFrom(provideMessaging(() => getMessaging())),
+    importProvidersFrom(provideStorage(() => getStorage())),
   ],
 };

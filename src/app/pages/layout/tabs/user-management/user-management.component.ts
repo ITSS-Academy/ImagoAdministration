@@ -14,11 +14,11 @@ import {Router} from "@angular/router";
 export class UserManagementComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(private router: Router) {
   }
-
+  
   ngOnInit(): void {
-    let name = this.router.url.split('/').pop();
-    let index = this.types.findIndex((item) => item.route === name);
-    this.navigateTo(name, index);
+    this.name = this.router.url.split('/').pop();
+    this.index = this.types.findIndex((item) => item.route === this.name);
+    this.navigateTo(this.name, this.index);
   }
 
   ngOnChanges(): void {
@@ -27,6 +27,8 @@ export class UserManagementComponent implements OnInit, OnChanges, AfterViewInit
   ngAfterViewInit() {
   }
 
+  name = '';
+  index = 0;
   tabIndex = 0;
 
   types = [

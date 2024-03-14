@@ -10,3 +10,7 @@
     align-self: center;
   }
 }
+
+::ng-deep .cds--loading__stroke {
+  stroke: var(--cds-interactive, #161616);
+}

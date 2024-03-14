@@ -28,9 +28,10 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.store.select('auth', 'idToken').subscribe((token) => {
         if (token != '') {
+          this.token = token;
           this.store.dispatch(
             ProfileActions.getAllAuthNoProfile({
-              token: token,
+              token: this.token,
               page: this.page,
               size: this.numberSize,
             }),
@@ -41,11 +42,23 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
 
     this.authNoProfile$.subscribe((data) => {
       this.dataset = data.data.map((item) => {
+          const date = new Date(
+            item.createdAt._seconds * 1000 +
+            item.createdAt._nanoseconds / 1000000
+          );
+          const formattedDate = date.toLocaleString('vi-VN', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+
+            hour12: false,
+          });
           return [
             new TableItem({data: item.id}),
             new TableItem({data: item.email}),
             new TableItem({data: item.role}),
-            new TableItem({data: item.createdAt._seconds}),
+            new TableItem({data: formattedDate}),
             new TableItem({data: item.isBanned ? "Unblock" : "Block"}),
             new TableItem({data: "Choose", template: this.overflowMenuItemTemplateChoose}),
           ]
@@ -74,6 +87,7 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
   loading$ = this.store.select((state) => state.profile.isLoading);
   error$ = this.store.select((state) => state.profile.errorMess);
   dataset = [];
+  token = "";
   photoUrl = "";
   role = "";
   block = false;
@@ -105,9 +119,15 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
   selectedId: string = '';
 
   onRowSelected(index: number) {
-    this.selectedId = this.model.data[index][0].data;
-    this.role = this.model.data[index][2].data;
-    this.block = this.model.data[index][4].data == "Block" ? false : true;
+    if (index == -1) {
+      this.selectedId = '';
+      this.role = '';
+      this.block = false;
+    } else {
+      this.selectedId = this.model.data[index][0].data;
+      this.role = this.model.data[index][2].data;
+      this.block = this.model.data[index][4].data == "Block" ? false : true;
+    }
   }
 
   filterNodeNames(searchString: string) {
@@ -117,17 +137,13 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
 
   selectPage(page: number) {
     this.modelPagination.currentPage = page;
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          ProfileActions.getAllAuthNoProfile({
-            token: token,
-            page: page,
-            size: this.numberSize,
-          }),
-        );
-      }
-    })
+    this.store.dispatch(
+      ProfileActions.getAllAuthNoProfile({
+        token: this.token,
+        page: page,
+        size: this.numberSize,
+      }),
+    );
   }
 
   overflowOnClick = (event: any) => {
@@ -138,61 +154,54 @@ export class AuthnoprofileComponent implements OnInit, OnDestroy {
     if (name == "admin") {
       this.role = "admin";
       this.changeNameRole();
+      this.model.data = this.dataset;
     } else {
       this.role = "user";
       this.changeNameRole();
+      this.model.data = this.dataset;
     }
   }
 
   changeNameRole() {
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          AuthActions.changeRole({
-            idToken: token,
-            id: this.selectedId,
-            role: this.role,
-          }),
-        );
-      }
-    });
+    this.store.dispatch(
+      AuthActions.changeRole({
+        idToken: this.token,
+        id: this.selectedId,
+        role: this.role,
+      }),
+    );
   }
+
 
   changeStatusBlock(name: string) {
     if (name == "block") {
       this.block = true;
       this.changeBlock();
+      this.model.data = this.dataset;
     } else {
       this.block = false;
       this.changeUnBlock();
+      this.model.data = this.dataset;
     }
   }
 
   changeBlock() {
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          AuthActions.changeBlock({
-            idToken: token,
-            id: this.selectedId,
-            isBanned: this.block,
-          }),
-        );
-      }
-    });
+    this.store.dispatch(
+      AuthActions.changeBlock({
+        idToken: this.token,
+        id: this.selectedId,
+        isBanned: this.block,
+      }),
+    );
   }
 
   changeUnBlock() {
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          AuthActions.changeUnblock({
-            idToken: token,
-            id: this.selectedId,
-            isBanned: this.block,
-          }),
-        );
-      }
-    });
+    this.store.dispatch(
+      AuthActions.changeUnblock({
+        idToken: this.token,
+        id: this.selectedId,
+        isBanned: this.block,
+      }),
+    );
   }
 }

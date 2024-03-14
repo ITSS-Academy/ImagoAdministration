@@ -28,9 +28,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription.push(
       this.store.select('auth', 'idToken').subscribe((token) => {
         if (token != '') {
+          this.token = token;
           this.store.dispatch(
             ProfileActions.getAllAuthProfile({
-              token: token,
+              token: this.token,
               page: this.page,
               size: this.numberSize,
             }),
@@ -84,6 +85,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loading$ = this.store.select((state) => state.profile.isLoading);
   error$ = this.store.select((state) => state.profile.errorMess);
   dataset = [];
+  token = "";
   photoUrl = "";
   role = "";
   block = false;
@@ -118,10 +120,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
   selectedId: string = '';
 
   onRowSelected(index: number) {
-    this.selectedId = this.model.data[index][0].data;
-    this.photoUrl = this.model.data[index][1].data;
-    this.role = this.model.data[index][6].data;
-    this.block = this.model.data[index][9].data == "Block" ? false : true;
+    if (index == -1) {
+      this.selectedId = '';
+      this.photoUrl = '';
+      this.role = '';
+      this.block = false;
+    } else {
+      this.selectedId = this.model.data[index][0].data;
+      this.photoUrl = this.model.data[index][1].data;
+      this.role = this.model.data[index][6].data;
+      this.block = this.model.data[index][9].data == "Block" ? false : true;
+    }
   }
 
   errorUrl(src: any) {
@@ -135,17 +144,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   selectPage(page: number) {
     this.modelPagination.currentPage = page;
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          ProfileActions.getAllAuthProfile({
-            token: token,
-            page: page,
-            size: this.numberSize,
-          }),
-        );
-      }
-    })
+    this.store.dispatch(
+      ProfileActions.getAllAuthProfile({
+        token: this.token,
+        page: page,
+        size: this.numberSize,
+      }),
+    );
   }
 
   overflowOnClick = (event: any) => {
@@ -187,30 +192,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   changeBlock() {
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          AuthActions.changeBlock({
-            idToken: token,
-            id: this.selectedId,
-            isBanned: this.block,
-          }),
-        );
-      }
-    });
+    this.store.dispatch(
+      AuthActions.changeBlock({
+        idToken: this.token,
+        id: this.selectedId,
+        isBanned: this.block,
+      }),
+    );
   }
 
   changeUnBlock() {
-    this.store.select('auth', 'idToken').subscribe((token) => {
-      if (token != '') {
-        this.store.dispatch(
-          AuthActions.changeUnblock({
-            idToken: token,
-            id: this.selectedId,
-            isBanned: this.block,
-          }),
-        );
-      }
-    });
+    this.store.dispatch(
+      AuthActions.changeUnblock({
+        idToken: this.token,
+        id: this.selectedId,
+        isBanned: this.block,
+      }),
+    );
   }
 }

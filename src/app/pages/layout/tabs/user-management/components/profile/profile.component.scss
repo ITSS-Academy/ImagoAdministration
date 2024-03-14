@@ -21,33 +21,33 @@ cds-table-container {
   height: 24px;
 }
 
-::ng-deep #icon-btn1 {
-  background-color: #f4f4f4;
-  color: #525252;
-  margin-right: 0.625rem;
-  border: none;
-  width: 50px;
-  height: 50px;
+//::ng-deep #icon-btn1 {
+//  background-color: #f4f4f4;
+//  color: #525252;
+//  margin-right: 0.625rem;
+//  border: none;
+//  width: 50px;
+//  height: 50px;
+//
+//  &:hover {
+//    background-color: gray;
+//    cursor: pointer;
+//  }
+//}
+//
+//::ng-deep #icon-btn2 {
+//  background-color: #f4f4f4;
+//  color: #525252;
+//  cursor: pointer;
+//  border: none;
+//  width: 50px;
+//  height: 50px;
+//}
 
-  &:hover {
-    background-color: gray;
-    cursor: pointer;
-  }
-}
-
-::ng-deep #icon-btn2 {
-  background-color: #f4f4f4;
-  color: #525252;
-  cursor: pointer;
-  border: none;
-  width: 50px;
-  height: 50px;
-}
-
-::ng-deep .cds--overflow-menu-options--open {
-  //width: 6.1%;
-  margin: 3.1% 0;
-}
+//::ng-deep .cds--overflow-menu-options--open {
+//  width: 6.1%;
+//  margin: 3.1% 0;
+//}
 
 ::ng-deep .cds--overflow-menu-options[data-floating-menu-direction=bottom]:not(.cds--breadcrumb-menu-options)::after {
   block-size: 0;
@@ -63,4 +63,16 @@ cds-table-container {
 
 ::ng-deep .cds--loading__stroke {
   stroke: var(--cds-interactive, #161616);
+}
+
+::ng-deep .cds--overflow-menu-options {
+  background-color: #f4f4f4;
+}
+
+::ng-deep .cds--overflow-menu-options__option--disabled .cds--overflow-menu-options__btn {
+  color: #c6c6c6;
+}
+
+::ng-deep .cds--overflow-menu-options__btn {
+  color: #161616;
 }
